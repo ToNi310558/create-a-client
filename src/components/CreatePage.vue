@@ -28,7 +28,7 @@
           <input class="form__input" v-model.trim="birthdate" @input="setBirthdate($event.target.value)" type="date"/></label>
       </div>
 
-      <div class="form-group" :class="{ 'form-group--error': $v.patronymic.$error }">
+      <div class="form-group" :class="{ 'form-group--error': $v.phoneNumber.$error }">
         <label class="form__label">Номер телефона<span class="error" v-if="!$v.phoneNumber.required">*</span><br>
         <input class="form__input" v-model.trim="phoneNumber" @input="setPhoneNumber($event.target.value)" type="tel"
                placeholder="7-xxx-xxx-xxxx" maxlength="14" minlength="11"/></label>
@@ -43,7 +43,23 @@
       </div>
 
       <div class="form-group">
-          <label>Группа клиентов</label>
+          <label>Группа клиентов<span class="error" v-if="!$v.typeOfClient.required">*</span>
+          <select multiple="multiple" size="3" class="type-of-client" v-model.trim="typeOfClient">
+            <option > VIP</option>
+            <option> Проблемные</option>
+            <option> ОМС</option>
+          </select>
+          </label>
+      </div>
+
+      <div class="form-group">
+        <label>Лечащий врач
+          <select class="type-of-client">
+            <option>Иванов</option>
+            <option>Захаров</option>
+            <option>Чернышева</option>
+          </select>
+        </label>
       </div>
 
     </div>
@@ -64,6 +80,7 @@ export default {
       patronymic: '',
       birthdate: '',
       phoneNumber: '',
+      typeOfClient: '',
     }
   },
   validations: {
@@ -88,6 +105,9 @@ export default {
     phoneNumber: {
       required,
       phone
+    },
+    typeOfClient: {
+      required
     }
   },
 
@@ -111,9 +131,9 @@ export default {
     setPhoneNumber(value) {
       this.phoneNumber = value
       this.$v.phoneNumber.$touch()
-    }
-  }
+    },
 
+  }
 }
 </script>
 
@@ -139,4 +159,16 @@ input {
 .valid:focus {
   outline-color: #8E8;
 }
+  .type-of-client{
+    display: block;
+    margin-top: 10px;
+    overflow: hidden;
+    width: 150px;
+  }
+  option{
+    border-bottom: 1px solid black;
+  }
+  option:last-child{
+    border-bottom: none;
+  }
 </style>
