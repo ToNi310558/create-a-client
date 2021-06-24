@@ -1,58 +1,142 @@
 <template>
   <div class="hello">
-    <h1>{{ msg }}</h1>
-    <p>
-      For a guide and recipes on how to configure / customize this project,<br>
-      check out the
-      <a href="https://cli.vuejs.org" target="_blank" rel="noopener">vue-cli documentation</a>.
-    </p>
-    <h3>Installed CLI Plugins</h3>
-    <ul>
-      <li><a href="https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-babel" target="_blank" rel="noopener">babel</a></li>
-      <li><a href="https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-eslint" target="_blank" rel="noopener">eslint</a></li>
-    </ul>
-    <h3>Essential Links</h3>
-    <ul>
-      <li><a href="https://vuejs.org" target="_blank" rel="noopener">Core Docs</a></li>
-      <li><a href="https://forum.vuejs.org" target="_blank" rel="noopener">Forum</a></li>
-      <li><a href="https://chat.vuejs.org" target="_blank" rel="noopener">Community Chat</a></li>
-      <li><a href="https://twitter.com/vuejs" target="_blank" rel="noopener">Twitter</a></li>
-      <li><a href="https://news.vuejs.org" target="_blank" rel="noopener">News</a></li>
-    </ul>
-    <h3>Ecosystem</h3>
-    <ul>
-      <li><a href="https://router.vuejs.org" target="_blank" rel="noopener">vue-router</a></li>
-      <li><a href="https://vuex.vuejs.org" target="_blank" rel="noopener">vuex</a></li>
-      <li><a href="https://github.com/vuejs/vue-devtools#vue-devtools" target="_blank" rel="noopener">vue-devtools</a></li>
-      <li><a href="https://vue-loader.vuejs.org" target="_blank" rel="noopener">vue-loader</a></li>
-      <li><a href="https://github.com/vuejs/awesome-vue" target="_blank" rel="noopener">awesome-vue</a></li>
-    </ul>
+    <div>
+
+      <div class="form-group" :class="{ 'form-group--error': $v.surname.$error }">
+        <label class="form__label">Фамилия<span class="error" v-if="!$v.surname.required">*</span><br>
+          <input class="form__input" v-model.trim="surname" @input="setSurname($event.target.value)" type="text"/></label>
+      <span class="error" v-if="!$v.surname.minLength"> Не менее {{$v.surname.$params.minLength.min}} букв.</span>
+        <span class="error" v-if="!$v.surname.alpha"> Недопустимые символы</span>
+      </div>
+
+      <div class="form-group" :class="{ 'form-group--error': $v.name.$error }">
+        <label class="form__label">Имя<span class="error" v-if="!$v.name.required">*</span><br>
+          <input class="form__input" v-model.trim="name" @input="setName($event.target.value)" type="text"/></label>
+      <span class="error" v-if="!$v.name.minLength"> Не менее {{$v.name.$params.minLength.min}} букв.</span>
+        <span class="error" v-if="!$v.name.alpha"> Недопустимые символы</span>
+      </div>
+
+      <div class="form-group" :class="{ 'form-group--error': $v.patronymic.$error }">
+        <label class="form__label">Отчество<br>
+          <input class="form__input" v-model.trim="patronymic" @input="setPatronymic($event.target.value)" type="text"/></label>
+      <span class="error" v-if="!$v.patronymic.minLength"> Не менее {{$v.patronymic.$params.minLength.min}} букв.</span>
+        <span class="error" v-if="!$v.patronymic.alpha"> Недопустимые символы</span>
+      </div>
+
+      <div class="form-group" :class="{ 'form-group--error': $v.birthdate.$error }">
+        <label class="form__label">Дата рождения<span class="error" v-if="!$v.birthdate.required">*</span><br>
+          <input class="form__input" v-model.trim="birthdate" @input="setBirthdate($event.target.value)" type="date"/></label>
+      </div>
+
+      <div class="form-group" :class="{ 'form-group--error': $v.patronymic.$error }">
+        <label class="form__label">Номер телефона<span class="error" v-if="!$v.phoneNumber.required">*</span><br>
+        <input class="form__input" v-model.trim="phoneNumber" @input="setPhoneNumber($event.target.value)" type="tel"
+               placeholder="7-xxx-xxx-xxxx" maxlength="14" minlength="11"/></label>
+        <span class="error" v-if="!$v.phoneNumber.phone"> Неверно набран номер</span>
+      </div>
+
+      <div class="form-group">
+        <label for="gender">Пол<br>
+          <label><input type="radio" name="gender" id="gender">Мужской</label>
+          <label><input type="radio" name="gender">Женский</label>
+        </label>
+      </div>
+
+      <div class="form-group">
+          <label>Группа клиентов</label>
+      </div>
+
+    </div>
   </div>
 </template>
 
 <script>
+  import { required, minLength, helpers } from 'vuelidate/lib/validators'
+const alpha = helpers.regex('alpha', /^[ЁА-Яёа-я]*$/)
+  const phone = helpers.regex('phone', /^\(?([7]{1})\)?[-. ]?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$/)
+
 export default {
   name: 'HelloWorld',
-  props: {
-    msg: String
+  data() {
+    return {
+      surname: '',
+      name: '',
+      patronymic: '',
+      birthdate: '',
+      phoneNumber: '',
+    }
+  },
+  validations: {
+    surname:{
+      required,
+      minLength: minLength(4),
+      alpha
+    },
+    name: {
+      required,
+      minLength: minLength(4),
+      alpha
+    },
+    patronymic:{
+      required,
+      minLength: minLength(6),
+      alpha
+    },
+    birthdate:{
+      required
+    },
+    phoneNumber: {
+      required,
+      phone
+    }
+  },
+
+  methods: {
+    setSurname(value) {
+      this.surname = value
+      this.$v.surname.$touch()
+    },
+    setName(value) {
+      this.name = value
+      this.$v.name.$touch()
+    },
+    setPatronymic(value) {
+      this.patronymic = value
+      this.$v.patronymic.$touch()
+    },
+    setBirthdate(value) {
+      this.birthdate = value
+      this.$v.birthdate.$touch()
+    },
+    setPhoneNumber(value) {
+      this.phoneNumber = value
+      this.$v.phoneNumber.$touch()
+    }
   }
+
 }
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
+
 <style scoped lang="scss">
-h3 {
-  margin: 40px 0 0;
+.form-group{
+  margin-bottom: 20px;
 }
-ul {
-  list-style-type: none;
-  padding: 0;
+input {
+  border: 1px solid silver;
+  border-radius: 4px;
+  background: white;
+  padding: 5px 10px;
 }
-li {
-  display: inline-block;
-  margin: 0 10px;
+.error {
+  color: red;
 }
-a {
-  color: #42b983;
+
+.valid {
+  border-color: #5A5;
+  background: #EFE;
+}
+.valid:focus {
+  outline-color: #8E8;
 }
 </style>
