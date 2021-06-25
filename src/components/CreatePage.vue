@@ -8,9 +8,9 @@
                     @input="setSurname($event.target.value)" type="text"
                     :class="{ 'form-group--error': $v.surname.$error }"/></label>
          </div>
-        <span class="error" v-if="!$v.surname.required"> Поле обязательно для заполнения</span>
+        <span class="error" v-if="!$v.surname.required">{{msgRequired}}</span>
           <span class="error" v-if="!$v.surname.minLength"> Не менее {{$v.surname.$params.minLength.min}} букв.</span>
-          <span class="error" v-else-if="!$v.surname.alpha"> Недопустимые символы</span>
+          <span class="error" v-else-if="!$v.surname.alpha">{{msgInvalid}}</span>
 
          <div class="form-group">
             <label class="form__label">Имя*<br>
@@ -18,9 +18,9 @@
                    @input="setName($event.target.value)" type="text"
                    :class="{ 'form-group--error': $v.name.$error }"/></label>
           </div>
-        <span class="error" v-if="!$v.name.required"> Поле обязательно для заполнения</span>
+        <span class="error" v-if="!$v.name.required">{{msgRequired}}</span>
           <span class="error" v-if="!$v.name.minLength"> Не менее {{$v.name.$params.minLength.min}} букв.</span>
-          <span class="error" v-else-if="!$v.name.alpha"> Недопустимые символы</span>
+          <span class="error" v-else-if="!$v.name.alpha">{{msgInvalid}}</span>
 
            <div class="form-group">
              <label class="form__label">Отчество<br>
@@ -28,14 +28,14 @@
                     @input="setPatronymic($event.target.value)" type="text"/></label>
            </div>
            <span class="error" v-if="!$v.patronymic.minLength"> Не менее {{$v.patronymic.$params.minLength.min}} букв.</span>
-           <span class="error" v-else-if="!$v.patronymic.alpha"> Недопустимые символы</span>
+           <span class="error" v-else-if="!$v.patronymic.alpha">{{msgInvalid}}</span>
 
         <div class="form-group">
             <label class="form__label">Дата рождения*<br>
                 <input class="form__input" v-model.trim="birthdate" @input="setBirthdate($event.target.value)" type="date"
                        :class="{ 'form-group--error': $v.birthdate.$error }"/></label>
         </div>
-        <span class="error" v-if="!$v.birthdate.required"> Поле обязательно для заполнения</span>
+        <span class="error" v-if="!$v.birthdate.required">{{msgRequired}}</span>
 
          <button type="button" class="btn"
                  :disabled="disabledBtn1"
@@ -51,7 +51,7 @@
                      type="tel" placeholder="7-xxx-xxx-xxxx" maxlength="14" minlength="11"
                      :class="{ 'form-group--error': $v.phoneNumber.$error }"/></label>
           </div>
-        <span class="error" v-if="!$v.phoneNumber.required"> Поле обязательно для заполнения</span>
+        <span class="error" v-if="!$v.phoneNumber.required">{{msgRequired}}</span>
           <span class="error" v-if="!$v.phoneNumber.phone"> Неверно набран номер</span>
 
           <div class="form-group">
@@ -106,19 +106,19 @@
                          @input="setRegionIndex($event.target.value)"
                          type="text" placeholder="xxxxxx" maxlength="6"/></label>
           </div>
-          <span class="error" v-if="!$v.regionIndex.onlyNumbers"> Недопустимые символы</span>
+          <span class="error" v-if="!$v.regionIndex.onlyNumbers">{{msgInvalid}}</span>
 
           <div class="form-group">
               <label class="form__label">Страна<br>
                   <input class="form__input" v-model.trim="country" type="text" maxlength="20"/></label>
           </div>
-          <span class="error" v-if="!$v.country.alpha"> Недопустимые символы</span>
+          <span class="error" v-if="!$v.country.alpha">{{msgInvalid}}</span>
 
           <div class="form-group">
               <label class="form__label">Область<br>
                   <input class="form__input" v-model.trim="region" type="text" maxlength="25"/></label>
           </div>
-          <span class="error" v-if="!$v.region.alpha"> Недопустимые символы</span>
+          <span class="error" v-if="!$v.region.alpha">{{msgInvalid}}</span>
 
           <div class="form-group">
               <label class="form__label">Город*<br>
@@ -126,9 +126,9 @@
                          @input="setCity($event.target.value)" type="text"
                          :class="{ 'form-group--error': $v.typeOfClient.$error }"/></label>
           </div>
-          <span class="error" v-if="!$v.city.required"> Поле обязательно для заполнения</span>
+          <span class="error" v-if="!$v.city.required">{{msgRequired}}</span>
           <span class="error" v-if="!$v.city.minLength"> Не менее {{$v.city.$params.minLength.min}} букв.</span>
-          <span class="error" v-else-if="!$v.city.alpha"> Недопустимые символы</span>
+          <span class="error" v-else-if="!$v.city.alpha">{{msgInvalid}}</span>
 
           <div class="form-group">
               <label class="form__label">Улица<br>
@@ -139,6 +139,7 @@
               <label class="form__label">Дом<br>
                   <input class="form__input" v-model.trim="house"  type="text" maxlength="30"/></label>
           </div>
+          <span class="error" v-if="!$v.house.alpha">{{msgInvalid}}</span>
 
           <div class="flex-btn">
               <button @click="backStep" type="button" class="btn">Назад</button>
@@ -147,7 +148,6 @@
                       @click="nextStep" >Следующий шаг
               </button>
           </div>
-
       </div>
 
       <div class="step" v-show="step === 4">
@@ -169,25 +169,25 @@
               <label class="form__label">Серия<br>
                   <input class="form__input" v-model.trim="docSeries"  type="text" maxlength="30"/></label>
           </div>
-          <span class="error" v-if="!$v.docSeries.onlyNumbers"> Недопустимые символы</span>
+          <span class="error" v-if="!$v.docSeries.onlyNumbers">{{msgInvalid}}</span>
 
           <div class="form-group">
               <label class="form__label">Номер<br>
                   <input class="form__input" v-model.trim="docNumber"  type="text" maxlength="30"/></label>
           </div>
-          <span class="error" v-if="!$v.docNumber.onlyNumbers"> Недопустимые символы</span>
+          <span class="error" v-if="!$v.docNumber.onlyNumbers">{{msgInvalid}}</span>
 
           <div class="form-group">
               <label class="form__label">Кем выдан<br>
                   <input class="form__input" v-model.trim="docGivenOut"  type="text" maxlength="30"/></label>
           </div>
-          <span class="error" v-if="!$v.docGivenOut.alpha"> Недопустимые символы</span>
+          <span class="error" v-if="!$v.docGivenOut.alpha">{{msgInvalid}}</span>
 
           <div class="form-group">
               <label class="form__label">Дата выдачи*<br>
                   <input class="form__input" v-model.trim="docDate"  type="date" maxlength="30"/></label>
           </div>
-          <span class="error" v-if="!$v.docDate.required"> Поле обязательно для заполнения</span>
+          <span class="error" v-if="!$v.docDate.required">{{msgRequired}}</span>
 
           <div class="flex-btn">
               <button @click="backStep" type="button" class="btn">Назад</button>
@@ -199,6 +199,14 @@
       </div>
         <div class="step" v-show="step === 5">
             <h1>Клиент создан</h1>
+            {{'Фамилия: ' + surname}}<br>
+            {{'Имя: ' + name}}<br>
+            {{'Дата рождения: ' + birthdate}}<br>
+            {{'Телефон: ' + '+' + phoneNumber}}<br>
+            {{'Клиент группы: ' + typeOfClient}}<br>
+            {{'Город: ' + city}}<br>
+            {{'Документ: ' + document}}<br>
+            {{'Дата выдачи: ' + docDate}}<br>
         </div>
   </div>
 </template>
@@ -214,6 +222,8 @@ export default {
   data() {
     return {
       step: 1,
+       msgRequired: 'Поле обязательно для заполнения',
+       msgInvalid: 'Недопустимые символы',
       surname: '',
       name: '',
       patronymic: '',
@@ -226,7 +236,7 @@ export default {
       city: '',
       street: '',
       house: '',
-      document: [],
+      document: [ ],
       docSeries: '',
       docNumber: '',
       docGivenOut: '',
@@ -273,6 +283,9 @@ export default {
        required,
        minLength: minLength(3)
      },
+      house: {
+        alpha
+      },
       document: {
         required
       },
@@ -309,7 +322,7 @@ computed: {
             this.$v.phoneNumber.$invalid ||
             this.$v.typeOfClient.$invalid ||
              this.$v.city.$invalid
-    }
+    },
 },
   methods: {
     setSurname(value) {
