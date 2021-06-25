@@ -64,14 +64,14 @@
           <div class="form-group">
               <label class="form__label">Группа клиентов*
                  <select multiple="multiple" size="3" class="type-of-client" v-model.trim="typeOfClient"
-                         @select="setTypeOfClient($event.target.value)"  :class="{ 'form-group--error': $v.typeOfClient.$error }">
+                         @select="setTypeOfClient($event.target.value)">
                      <option > VIP</option>
                      <option> Проблемные</option>
                      <option> ОМС</option>
                  </select>
               </label>
           </div>
-        <span class="error" v-if="!$v.typeOfClient.required"> Поле обязательно для заполнения</span>
+        <span class="error" v-if="!$v.typeOfClient.required"> Выберите группу клиентов</span>
 
          <div class="form-group">
              <label>Лечащий врач
@@ -106,7 +106,7 @@
                          @input="setRegionIndex($event.target.value)"
                          type="text" placeholder="xxxxxx" maxlength="6"/></label>
           </div>
-          <span class="error" v-if="!$v.regionIndex.indexRegions"> Недопустимые символы</span>
+          <span class="error" v-if="!$v.regionIndex.onlyNumbers"> Недопустимые символы</span>
 
           <div class="form-group">
               <label class="form__label">Страна<br>
@@ -142,12 +142,64 @@
 
           <div class="flex-btn">
               <button @click="backStep" type="button" class="btn">Назад</button>
-              <button @click="nextStep" type="button" class="btn">Следующий шаг</button>
+              <button type="button" class="btn"
+                      :disabled="disabledBtn3"
+                      @click="nextStep" >Следующий шаг
+              </button>
           </div>
 
       </div>
 
+      <div class="step" v-show="step === 4">
 
+          <div class="form-group">
+               <label>Тип документа*
+                   <select  v-model.trim="document"
+                            :class="{ 'form-group--error': $v.document.$error }"
+                            @select="setDocument($event.target.value)" >
+                       <option>Паспорт</option>
+                       <option>Свидетельство о рождении</option>
+                       <option>Вод. удостоверение</option>
+                   </select>
+               </label>
+          </div>
+          <span class="error" v-if="!$v.document.required"> Выберите тип документа</span>
+
+          <div class="form-group">
+              <label class="form__label">Серия<br>
+                  <input class="form__input" v-model.trim="docSeries"  type="text" maxlength="30"/></label>
+          </div>
+          <span class="error" v-if="!$v.docSeries.onlyNumbers"> Недопустимые символы</span>
+
+          <div class="form-group">
+              <label class="form__label">Номер<br>
+                  <input class="form__input" v-model.trim="docNumber"  type="text" maxlength="30"/></label>
+          </div>
+          <span class="error" v-if="!$v.docNumber.onlyNumbers"> Недопустимые символы</span>
+
+          <div class="form-group">
+              <label class="form__label">Кем выдан<br>
+                  <input class="form__input" v-model.trim="docGivenOut"  type="text" maxlength="30"/></label>
+          </div>
+          <span class="error" v-if="!$v.docGivenOut.alpha"> Недопустимые символы</span>
+
+          <div class="form-group">
+              <label class="form__label">Дата выдачи*<br>
+                  <input class="form__input" v-model.trim="docDate"  type="date" maxlength="30"/></label>
+          </div>
+          <span class="error" v-if="!$v.docDate.required"> Поле обязательно для заполнения</span>
+
+          <div class="flex-btn">
+              <button @click="backStep" type="button" class="btn">Назад</button>
+              <button type="button" class="btn"
+                      :disabled="disabledBtn4"
+                      @click="nextStep" >Завершить регистрацию
+              </button>
+          </div>
+      </div>
+        <div class="step" v-show="step === 5">
+            <h1>Клиент создан</h1>
+        </div>
   </div>
 </template>
 
@@ -155,7 +207,7 @@
   import { required, minLength, helpers } from 'vuelidate/lib/validators'
     const alpha = helpers.regex('alpha', /^[ЁА-Яёа-я]*$/)
     const phone = helpers.regex('phone', /^\(?([7]{1})\)?[-. ]?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$/)
-    let indexRegions = helpers.regex('indexRegions', /^[0-9]*$/)
+    let onlyNumbers = helpers.regex('onlyNumbers', /^[0-9]*$/)
 
 export default {
   name: 'HelloWorld',
@@ -173,7 +225,12 @@ export default {
       region: '',
       city: '',
       street: '',
-      house: ''
+      house: '',
+      document: [],
+      docSeries: '',
+      docNumber: '',
+      docGivenOut: '',
+      docDate: ''
     }
   },
   validations: {
@@ -201,20 +258,35 @@ export default {
     typeOfClient: {
       required
     },
-      regionIndex: {
-        required,
-        indexRegions
-      },
-      country: {
-        alpha
-      },
+     regionIndex: {
+       required,
+       onlyNumbers
+     },
+     country: {
+       alpha
+     },
       region: {
-        alpha
+       alpha
+     },
+     city: {
+       alpha,
+       required,
+       minLength: minLength(3)
+     },
+      document: {
+        required
       },
-      city: {
-        alpha,
-        required,
-          minLength: minLength(3)
+      docDate: {
+        required
+      },
+      docSeries: {
+        onlyNumbers
+      },
+      docNumber: {
+        onlyNumbers
+      },
+      docGivenOut: {
+        alpha
       }
   },
 computed: {
@@ -225,6 +297,18 @@ computed: {
     disabledBtn2() {
         return this.$v.phoneNumber.$invalid ||
             this.$v.typeOfClient.$invalid
+    },
+    disabledBtn3() {
+        return this.$v.city.$invalid
+    },
+    disabledBtn4() {
+        return this.$v.document.$invalid ||
+            this.$v.docDate.$invalid ||
+            this.$v.surname.$invalid ||
+            this.$v.name.$invalid ||
+            this.$v.phoneNumber.$invalid ||
+            this.$v.typeOfClient.$invalid ||
+             this.$v.city.$invalid
     }
 },
   methods: {
@@ -259,6 +343,10 @@ computed: {
       setCity(value) {
           this.city = value
           this.$v.city.$touch()
+      },
+      setDocument(value) {
+        this.document = value
+         this.$v.document.$touch()
       },
     nextStep() {
       this.step++
@@ -324,4 +412,8 @@ computed: {
     display: flex;
     justify-content: space-between;
 }
+    h1{
+        font-size: 26px;
+        text-align: center;
+    }
 </style>
