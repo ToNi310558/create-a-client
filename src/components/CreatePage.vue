@@ -39,7 +39,7 @@
 
          <button type="button" class="btn"
                  :disabled="disabledBtn1"
-                 @click="nextStep" >Следующий шаг
+                @click="nextStep">Следующий шаг
          </button>
   </div>
 
@@ -305,7 +305,8 @@ export default {
 computed: {
     disabledBtn1() {
         return this.$v.surname.$invalid ||
-         this.$v.name.$invalid
+         this.$v.name.$invalid ||
+         this.$v.birthdate.$invalid
     },
     disabledBtn2() {
         return this.$v.phoneNumber.$invalid ||
@@ -418,6 +419,7 @@ computed: {
 .btn:hover { background: linear-gradient(#f5ae00, #f59500) #f5ae00; }
 .btn:active { background: linear-gradient(#f59500, #f5ae00) #f59500; }
 .btn:disabled {background: #f59500; border-color: #f59500}
+
 .form-group--error{
    border-color: red;
 }
