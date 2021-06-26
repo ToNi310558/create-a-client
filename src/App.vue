@@ -24,4 +24,11 @@ export default {
   margin: 60px auto;
   width: 300px;
 }
+  @media all and (max-width: 450px) {
+    #app{
+      margin: 50px auto;
+      width: 260px;
+      font-size: 16px;
+    }
+  }
 </style>

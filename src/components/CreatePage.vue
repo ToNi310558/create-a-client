@@ -199,14 +199,14 @@
       </div>
         <div class="step" v-show="step === 5">
             <h1>Клиент создан</h1>
-            {{'Фамилия: ' + surname}}<br>
-            {{'Имя: ' + name}}<br>
-            {{'Дата рождения: ' + birthdate}}<br>
-            {{'Телефон: ' + '+' + phoneNumber}}<br>
-            {{'Клиент группы: ' + typeOfClient}}<br>
-            {{'Город: ' + city}}<br>
-            {{'Документ: ' + document}}<br>
-            {{'Дата выдачи: ' + docDate}}<br>
+            <p>{{'Фамилия: ' + surname}}</p>
+            <p>{{'Имя: ' + name}}</p>
+            <p>{{'Дата рождения: ' + birthdate}}</p>
+            <p>{{'Телефон: ' + '+' + phoneNumber}}</p>
+            <p>{{'Клиент группы: ' + typeOfClient}}</p>
+            <p>{{'Город: ' + city}}</p>
+            <p>{{'Документ: ' + document}}</p>
+            <p>{{'Дата выдачи: ' + docDate}}</p>
         </div>
   </div>
 </template>
@@ -431,4 +431,26 @@ computed: {
         font-size: 26px;
         text-align: center;
     }
+.step p{
+    font-size: 16px;
+    margin-bottom: 10px;
+}
+@media all and (max-width: 450px) {
+    .form__input{
+        font-size: 15px;
+    }
+    .error{
+        font-size: 12px;
+    }
+    h1{
+        font-size: 20px;
+    }
+    .step p{
+        font-size: 14px;
+    }
+    .btn{
+        padding: 10px 10px;
+        font-size: 14px;
+    }
+}
 </style>
