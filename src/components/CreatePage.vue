@@ -4,18 +4,19 @@
     <div class="step" v-show="step === 1">
          <div class="form-group">
              <label class="form__label">Фамилия*<br>
-             <input class="form__input"  maxlength="20" v-model.trim="surname"
-                    @input="setSurname($event.target.value)" type="text"
+             <input class="form__input"  maxlength="20"
+                    v-model.trim.lazy="surname"
+                    @blur="$v.surname.$touch()" type="text"
                     :class="{ 'form-group--error': $v.surname.$error }"/></label>
          </div>
-        <span class="error" v-if="!$v.surname.required">{{msgRequired}}</span>
+        <span  v-if="!$v.surname.required" class="error">{{msgRequired}}</span>
           <span class="error" v-if="!$v.surname.minLength"> Не менее {{$v.surname.$params.minLength.min}} букв.</span>
           <span class="error" v-else-if="!$v.surname.alpha">{{msgInvalid}}</span>
 
          <div class="form-group">
             <label class="form__label">Имя*<br>
-            <input class="form__input" maxlength="20" v-model.trim="name"
-                   @input="setName($event.target.value)" type="text"
+            <input class="form__input" maxlength="20" v-model.trim.lazy="name"
+                   @blur="$v.name.$touch()" type="text"
                    :class="{ 'form-group--error': $v.name.$error }"/></label>
           </div>
         <span class="error" v-if="!$v.name.required">{{msgRequired}}</span>
@@ -24,15 +25,16 @@
 
            <div class="form-group">
              <label class="form__label">Отчество<br>
-             <input class="form__input" maxlength="20" v-model.trim="patronymic"
-                    @input="setPatronymic($event.target.value)" type="text"/></label>
+             <input class="form__input" maxlength="20"
+                    v-model.trim.lazy="patronymic" type="text"/></label>
            </div>
            <span class="error" v-if="!$v.patronymic.minLength"> Не менее {{$v.patronymic.$params.minLength.min}} букв.</span>
            <span class="error" v-else-if="!$v.patronymic.alpha">{{msgInvalid}}</span>
 
         <div class="form-group">
             <label class="form__label">Дата рождения*<br>
-                <input class="form__input" v-model.trim="birthdate" @input="setBirthdate($event.target.value)" type="date"
+                <input class="form__input" v-model.trim.lazy="birthdate"
+                       @blur="$v.birthdate.$touch()" type="date"
                        :class="{ 'form-group--error': $v.birthdate.$error }"/></label>
         </div>
         <span class="error" v-if="!$v.birthdate.required">{{msgRequired}}</span>
@@ -47,7 +49,8 @@
     <div class="step" v-show="step === 2">
           <div class="form-group">
               <label class="form__label">Номер телефона*<br>
-              <input class="form__input" v-model.trim="phoneNumber" @input="setPhoneNumber($event.target.value)"
+              <input class="form__input" v-model.trim="phoneNumber"
+                     @blur="$v.phoneNumber.$touch()"
                      type="tel" placeholder="7-xxx-xxx-xxxx" maxlength="14" minlength="11"
                      :class="{ 'form-group--error': $v.phoneNumber.$error }"/></label>
           </div>
@@ -56,15 +59,15 @@
 
           <div class="form-group">
               <label for="gender">Пол<br>
-                   <label><input type="radio" name="gender" id="gender">Мужской</label>
-                   <label><input type="radio" name="gender">Женский</label>
+                   <label><input type="radio"  id="gender" v-model="gender">Мужской</label>
+                   <label><input type="radio" v-model="gender">Женский</label>
             </label>
           </div>
 
           <div class="form-group">
               <label class="form__label">Группа клиентов*
-                 <select multiple="multiple" size="3" class="type-of-client" v-model.trim="typeOfClient"
-                         @select="setTypeOfClient($event.target.value)">
+                 <select multiple="multiple" size="3" class="type-of-client" v-model.trim.lazy="typeOfClient"
+                         @blur="$v.typeOfClient.$touch()">
                      <option > VIP</option>
                      <option> Проблемные</option>
                      <option> ОМС</option>
@@ -75,7 +78,7 @@
 
          <div class="form-group">
              <label>Лечащий врач
-                 <select class="type-of-client">
+                 <select class="type-of-client" v-model="doctor">
                      <option>Иванов</option>
                      <option>Захаров</option>
                      <option>Чернышева</option>
@@ -84,8 +87,8 @@
          </div>
 
           <div class="form-group">
-              <label for="gender">Не отправлять СМС
-                 <input type="checkbox">
+              <label for="SMS">Не отправлять СМС
+                 <input type="checkbox" id="SMS" v-model="sms">
               </label>
           </div>
 
@@ -102,28 +105,27 @@
       <div class="step" v-show="step === 3">
           <div class="form-group">
               <label class="form__label">Индекс<br>
-                  <input class="form__input" v-model.trim="regionIndex"
-                         @input="setRegionIndex($event.target.value)"
+                  <input class="form__input" v-model.trim.lazy="regionIndex"
                          type="text" placeholder="xxxxxx" maxlength="6"/></label>
           </div>
           <span class="error" v-if="!$v.regionIndex.onlyNumbers">{{msgInvalid}}</span>
 
           <div class="form-group">
               <label class="form__label">Страна<br>
-                  <input class="form__input" v-model.trim="country" type="text" maxlength="20"/></label>
+                  <input class="form__input" v-model.trim.lazy="country" type="text" maxlength="20"/></label>
           </div>
           <span class="error" v-if="!$v.country.alpha">{{msgInvalid}}</span>
 
           <div class="form-group">
               <label class="form__label">Область<br>
-                  <input class="form__input" v-model.trim="region" type="text" maxlength="25"/></label>
+                  <input class="form__input" v-model.trim.lazy="region" type="text" maxlength="25"/></label>
           </div>
           <span class="error" v-if="!$v.region.alpha">{{msgInvalid}}</span>
 
           <div class="form-group">
               <label class="form__label">Город*<br>
-                  <input class="form__input" maxlength="30" v-model.trim="city"
-                         @input="setCity($event.target.value)" type="text"
+                  <input class="form__input" maxlength="30" v-model.trim.lazy="city"
+                         @blur="$v.city.$touch()" type="text"
                          :class="{ 'form-group--error': $v.typeOfClient.$error }"/></label>
           </div>
           <span class="error" v-if="!$v.city.required">{{msgRequired}}</span>
@@ -132,12 +134,12 @@
 
           <div class="form-group">
               <label class="form__label">Улица<br>
-                  <input class="form__input" v-model.trim="street"  type="text" maxlength="30"/></label>
+                  <input class="form__input" v-model.trim.lazy="street"  type="text" maxlength="30"/></label>
           </div>
 
           <div class="form-group">
               <label class="form__label">Дом<br>
-                  <input class="form__input" v-model.trim="house"  type="text" maxlength="30"/></label>
+                  <input class="form__input" v-model.trim.lazy="house"  type="text" maxlength="30"/></label>
           </div>
           <span class="error" v-if="!$v.house.alpha">{{msgInvalid}}</span>
 
@@ -154,9 +156,9 @@
 
           <div class="form-group">
                <label>Тип документа*
-                   <select  v-model.trim="document"
+                   <select  v-model.trim.lazy="document"
                             :class="{ 'form-group--error': $v.document.$error }"
-                            @select="setDocument($event.target.value)" >
+                            @blur="$v.document.$touch()" >
                        <option>Паспорт</option>
                        <option>Свидетельство о рождении</option>
                        <option>Вод. удостоверение</option>
@@ -167,25 +169,28 @@
 
           <div class="form-group">
               <label class="form__label">Серия<br>
-                  <input class="form__input" v-model.trim="docSeries"  type="text" maxlength="30"/></label>
+                  <input class="form__input" v-model.trim.lazy="docSeries"  type="text" maxlength="30"/></label>
           </div>
           <span class="error" v-if="!$v.docSeries.onlyNumbers">{{msgInvalid}}</span>
 
           <div class="form-group">
               <label class="form__label">Номер<br>
-                  <input class="form__input" v-model.trim="docNumber"  type="text" maxlength="30"/></label>
+                  <input class="form__input" v-model.trim.lazy="docNumber"  type="text" maxlength="30"/></label>
           </div>
           <span class="error" v-if="!$v.docNumber.onlyNumbers">{{msgInvalid}}</span>
 
           <div class="form-group">
               <label class="form__label">Кем выдан<br>
-                  <input class="form__input" v-model.trim="docGivenOut"  type="text" maxlength="30"/></label>
+                  <input class="form__input" v-model.trim.lazy="docGivenOut"  type="text" maxlength="30"/></label>
           </div>
           <span class="error" v-if="!$v.docGivenOut.alpha">{{msgInvalid}}</span>
 
           <div class="form-group">
               <label class="form__label">Дата выдачи*<br>
-                  <input class="form__input" v-model.trim="docDate"  type="date" maxlength="30"/></label>
+                  <input class="form__input"
+                         v-model.trim.lazy="docDate"
+                         @blur="$v.docDate.$touch()"
+                         type="date" maxlength="30"/></label>
           </div>
           <span class="error" v-if="!$v.docDate.required">{{msgRequired}}</span>
 
@@ -212,7 +217,7 @@
 </template>
 
 <script>
-  import { required, minLength, helpers } from 'vuelidate/lib/validators'
+  import { required, minLength, helpers} from 'vuelidate/lib/validators'
     const alpha = helpers.regex('alpha', /^[ЁА-Яёа-я]*$/)
     const phone = helpers.regex('phone', /^\(?([7]{1})\)?[-. ]?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$/)
     let onlyNumbers = helpers.regex('onlyNumbers', /^[0-9]*$/)
@@ -228,8 +233,11 @@ export default {
       name: '',
       patronymic: '',
       birthdate: '',
+      gender: '',
       phoneNumber: '',
       typeOfClient: [ ],
+      doctor: '',
+      sms: false,
       regionIndex: '',
       country: '',
       region: '',
@@ -326,42 +334,6 @@ computed: {
     },
 },
   methods: {
-    setSurname(value) {
-      this.surname = value
-      this.$v.surname.$touch()
-    },
-    setName(value) {
-      this.name = value
-      this.$v.name.$touch()
-    },
-    setPatronymic(value) {
-      this.patronymic = value
-      this.$v.patronymic.$touch()
-    },
-    setBirthdate(value) {
-      this.birthdate = value
-      this.$v.birthdate.$touch()
-    },
-    setPhoneNumber(value) {
-      this.phoneNumber = value
-      this.$v.phoneNumber.$touch()
-    },
-  setTypeOfClient(value) {
-    this.typeOfClient = value
-    this.$v.typeOfClient.$touch()
-  },
-      setRegionIndex(value) {
-        this.regionIndex = value
-          this.$v.regionIndex.$touch()
-      },
-      setCity(value) {
-          this.city = value
-          this.$v.city.$touch()
-      },
-      setDocument(value) {
-        this.document = value
-         this.$v.document.$touch()
-      },
     nextStep() {
       this.step++
     },
