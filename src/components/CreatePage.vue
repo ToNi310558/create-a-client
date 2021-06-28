@@ -218,12 +218,12 @@
 
 <script>
   import { required, minLength, helpers} from 'vuelidate/lib/validators'
-    const alpha = helpers.regex('alpha', /^[ЁА-Яёа-я]*$/)
-    const phone = helpers.regex('phone', /^\(?([7]{1})\)?[-. ]?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$/)
-    let onlyNumbers = helpers.regex('onlyNumbers', /^[0-9]*$/)
+    const alpha = helpers.regex('alpha', /^[ЁА-Яёа-я]*$/);
+    const phone = helpers.regex('phone', /^\(?([7]{1})\)?[-. ]?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$/);
+    let onlyNumbers = helpers.regex('onlyNumbers', /^[0-9]*$/);
 
 export default {
-  name: 'HelloWorld',
+  name: 'CreatePage',
   data() {
     return {
       step: 1,
@@ -346,7 +346,7 @@ computed: {
 </script>
 
 
-<style scoped lang="scss">
+<style scoped>
 .form-group{
   margin-top: 20px;
 }
@@ -391,7 +391,6 @@ computed: {
 .btn:hover { background: linear-gradient(#f5ae00, #f59500) #f5ae00; }
 .btn:active { background: linear-gradient(#f59500, #f5ae00) #f59500; }
 .btn:disabled {background: #f59500; border-color: #f59500}
-
 .form-group--error{
    border-color: red;
 }
