@@ -59,8 +59,8 @@
 
           <div class="form-group">
               <label for="gender">Пол<br>
-                   <label><input type="radio"  id="gender" v-model="gender">Мужской</label>
-                   <label><input type="radio" v-model="gender">Женский</label>
+                   <label><input type="radio" name="gender" id="gender" v-model="gender">Мужской</label>
+                   <label><input type="radio" name="gender" v-model="gender">Женский</label>
             </label>
           </div>
 
